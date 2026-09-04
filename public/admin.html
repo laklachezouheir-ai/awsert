@@ -41,10 +41,10 @@
     <!-- Panneau de configuration -->
     <section id="config-card" class="search-card admin-card" hidden>
       <div class="admin-card-header">
-        <h1>Clé SerpApi</h1>
+        <h1>Clé Serper</h1>
         <button type="button" id="logout-btn" class="btn-secondary">Se déconnecter</button>
       </div>
-      <p class="subtitle">Cette clé permet à Awsert d'interroger Google Shopping pour récupérer les prix.</p>
+      <p class="subtitle">Cette clé permet à Awsert d'interroger Google Shopping (via Serper) pour récupérer les prix.</p>
 
       <div id="key-pill" class="key-pill unset">
         <span class="key-dot"></span>
@@ -52,18 +52,18 @@
       </div>
 
       <form id="config-form">
-        <label for="key-input">Nouvelle clé SerpApi</label>
+        <label for="key-input">Nouvelle clé Serper</label>
         <input
           type="text"
           id="key-input"
-          placeholder="Collez votre clé SerpApi ici"
+          placeholder="Collez votre clé Serper ici"
           autocomplete="off"
         />
         <button type="submit">Enregistrer la clé</button>
       </form>
       <p class="hint">
         Obtenez une clé gratuite sur
-        <a href="https://serpapi.com/" target="_blank" rel="noopener noreferrer">serpapi.com</a>.
+        <a href="https://serper.dev/" target="_blank" rel="noopener noreferrer">serper.dev</a>.
       </p>
     </section>
 

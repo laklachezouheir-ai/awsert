@@ -31,18 +31,18 @@ function showConfig(data) {
   configCard.hidden = false;
 
   if (data.hasKey) {
-    const sourceText = data.keySource === 'env' ? " (définie via la variable d'environnement SERPAPI_KEY)" : '';
+    const sourceText = data.keySource === 'env' ? " (définie via la variable d'environnement SERPER_API_KEY)" : '';
     keyStatus.textContent = `Clé active : ${data.maskedKey}${sourceText}`;
     keyPill.className = 'key-pill set';
   } else {
-    keyStatus.textContent = "Aucune clé SerpApi n'est configurée pour le moment.";
+    keyStatus.textContent = "Aucune clé Serper n'est configurée pour le moment.";
     keyPill.className = 'key-pill unset';
   }
 
   if (data.keySource === 'env') {
     keyInput.disabled = true;
     configForm.querySelector('button').disabled = true;
-    keyInput.placeholder = 'Gérée via SERPAPI_KEY dans .env';
+    keyInput.placeholder = 'Gérée via SERPER_API_KEY dans .env';
   }
 }
 
@@ -81,8 +81,8 @@ configForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   setStatus(null);
 
-  const serpApiKey = keyInput.value.trim();
-  if (!serpApiKey) {
+  const serperApiKey = keyInput.value.trim();
+  if (!serperApiKey) {
     setStatus('Veuillez saisir une clé.', 'error');
     return;
   }
@@ -90,7 +90,7 @@ configForm.addEventListener('submit', async (event) => {
   const response = await fetch('/api/admin/config', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ serpApiKey }),
+    body: JSON.stringify({ serperApiKey }),
   });
 
   const data = await response.json();
@@ -101,7 +101,7 @@ configForm.addEventListener('submit', async (event) => {
   }
 
   keyInput.value = '';
-  setStatus('Clé SerpApi enregistrée avec succès.', 'info');
+  setStatus('Clé Serper enregistrée avec succès.', 'info');
   await loadConfig();
 });
 

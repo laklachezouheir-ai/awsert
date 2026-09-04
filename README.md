@@ -9,7 +9,7 @@ prix trouvés chez différents marchands, triés du moins cher au plus cher.
 - **Frontend** : une seule page HTML/CSS/JS statique (`public/`), sans framework.
 - **Backend** : un serveur Node.js/Express (`server.js`) qui expose l'endpoint
   `POST /api/search`.
-- **Source des prix** : [SerpApi](https://serpapi.com/) (moteur `google_shopping`),
+- **Source des prix** : [Serper](https://serper.dev/) (endpoint `/shopping`),
   qui interroge Google Shopping et renvoie des résultats réels (titre, prix,
   marchand, lien).
 
@@ -27,9 +27,9 @@ npm start
 
 Puis ouvrez http://localhost:3000 dans votre navigateur.
 
-## Configuration de la clé SerpApi (page d'administration)
+## Configuration de la clé Serper (page d'administration)
 
-Aucune édition manuelle de fichier n'est nécessaire : la clé SerpApi se
+Aucune édition manuelle de fichier n'est nécessaire : la clé Serper se
 configure depuis une page d'administration dédiée.
 
 1. Au premier démarrage, si aucun mot de passe admin n'est défini, le
@@ -38,11 +38,11 @@ configure depuis une page d'administration dédiée.
    ========================================================
     Mot de passe administrateur généré automatiquement :
     xxxxxxxxxxxxxxxx
-    Connectez-vous sur /admin pour configurer votre clé SerpApi.
+    Connectez-vous sur /admin pour configurer votre clé Serper.
    ========================================================
    ```
 2. Ouvrez http://localhost:3000/admin et connectez-vous avec ce mot de passe.
-3. Collez votre clé SerpApi (obtenue gratuitement sur https://serpapi.com/)
+3. Collez votre clé Serper (obtenue gratuitement sur https://serper.dev/)
    et cliquez sur « Enregistrer la clé ».
 
 La clé est alors enregistrée localement dans `data/config.json` (non
@@ -52,11 +52,11 @@ Vous pouvez aussi passer par le fichier `.env` si vous préférez (voir
 `.env.example`) :
 
 ```
-SERPAPI_KEY=votre_cle_serpapi
+SERPER_API_KEY=votre_cle_serper
 ADMIN_PASSWORD=votre_mot_de_passe_admin
 ```
 
-Si `SERPAPI_KEY` est définie via l'environnement, elle est prioritaire sur
+Si `SERPER_API_KEY` est définie via l'environnement, elle est prioritaire sur
 celle enregistrée depuis `/admin` (la page d'administration devient alors
 en lecture seule pour ce champ).
 
@@ -77,7 +77,7 @@ Le dépôt contient un fichier `render.yaml` (Blueprint Render) prêt à l'emplo
 3. Render détecte `render.yaml` et propose de créer le service web `awsert`
    (build : `npm install`, démarrage : `npm start`).
 4. Avant de valider, renseigne les variables d'environnement demandées :
-   - `SERPAPI_KEY` : ta clé SerpApi
+   - `SERPER_API_KEY` : ta clé Serper
    - `ADMIN_PASSWORD` : le mot de passe que tu veux utiliser pour `/admin`
 5. Clique sur **Apply** / **Create Web Service**. Render build et démarre
    l'app, puis fournit une URL publique du type
@@ -92,7 +92,7 @@ fichiers d'un service web est réinitialisé à chaque déploiement et à chaque
 redémarrage (y compris la mise en veille automatique du plan gratuit après
 inactivité). Toute clé enregistrée uniquement via la page `/admin`
 (stockée dans `data/config.json`) sera donc perdue au prochain redémarrage.
-**Sur Render, définis `SERPAPI_KEY` et `ADMIN_PASSWORD` comme variables
+**Sur Render, définis `SERPER_API_KEY` et `ADMIN_PASSWORD` comme variables
 d'environnement** (étape 4 ci-dessus) plutôt que de compter sur `/admin`
 pour la persistance — la page `/admin` reste utilisable pour vérifier la
 configuration, mais devient alors en lecture seule (la clé étant définie
@@ -108,7 +108,7 @@ via l'environnement).
 
 ## Limites connues
 
-- Sans clé SerpApi configurée (ni via `/admin`, ni via `.env`), la recherche
+- Sans clé Serper configurée (ni via `/admin`, ni via `.env`), la recherche
   renvoie une erreur explicite (503) plutôt que des résultats.
 - L'authentification admin est volontairement minimale (un seul mot de passe,
   sessions en mémoire) : suffisante pour un usage personnel/petite équipe,
@@ -116,7 +116,7 @@ via l'environnement).
   utilisateurs finaux ni facturation/abonnement n'est incluse : c'est une
   base volontairement minimale, à étendre selon les besoins (comptes
   utilisateurs, plans payants, historique des recherches, etc.).
-- Le quota de requêtes dépend du plan SerpApi choisi.
+- Le quota de requêtes dépend du plan Serper choisi.
 
 ## Structure du projet
 
@@ -124,8 +124,8 @@ via l'environnement).
 awsert/
 ├── server.js              # Serveur Express : /api/search, /api/health, /api/admin/*
 ├── lib/
-│   ├── priceSearch.js     # Appel à SerpApi (Google Shopping) et normalisation des résultats
-│   ├── config.js          # Lecture/écriture de la clé SerpApi et du mot de passe admin
+│   ├── priceSearch.js     # Appel à Serper (Google Shopping) et normalisation des résultats
+│   ├── config.js          # Lecture/écriture de la clé Serper et du mot de passe admin
 │   └── adminAuth.js       # Sessions et middleware d'authentification admin
 ├── public/
 │   ├── index.html         # Page de recherche

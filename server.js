@@ -28,12 +28,12 @@ app.post('/api/search', async (req, res) => {
     return res.status(400).json({ error: 'Veuillez saisir au moins un produit à rechercher.' });
   }
 
-  const apiKey = config.getSerpApiKey();
+  const apiKey = config.getSerperApiKey();
 
   if (!apiKey) {
     return res.status(503).json({
       error:
-        "Aucune clé SerpApi configurée. Rendez-vous sur /admin pour renseigner votre clé et activer la recherche de prix.",
+        "Aucune clé Serper configurée. Rendez-vous sur /admin pour renseigner votre clé et activer la recherche de prix.",
     });
   }
 
@@ -61,12 +61,12 @@ app.get('/api/health', (_req, res) => {
   const { source: adminPasswordSource } = config.getAdminPassword();
   res.json({
     status: 'ok',
-    hasApiKey: Boolean(config.getSerpApiKey()),
+    hasApiKey: Boolean(config.getSerperApiKey()),
     adminPasswordSource, // 'env' si ADMIN_PASSWORD est définie, 'generated' sinon
   });
 });
 
-// --- Administration : connexion + configuration de la clé SerpApi ---
+// --- Administration : connexion + configuration de la clé Serper ---
 
 app.post('/api/admin/login', (req, res) => {
   const { password } = req.body || {};
@@ -94,30 +94,30 @@ app.post('/api/admin/logout', (req, res) => {
 });
 
 app.get('/api/admin/config', adminAuth.requireAdmin, (_req, res) => {
-  const key = config.getSerpApiKey();
+  const key = config.getSerperApiKey();
   const maskedKey = key ? `${'•'.repeat(Math.max(key.length - 4, 0))}${key.slice(-4)}` : null;
   res.json({
     hasKey: Boolean(key),
     maskedKey,
-    keySource: process.env.SERPAPI_KEY ? 'env' : 'admin',
+    keySource: process.env.SERPER_API_KEY ? 'env' : 'admin',
   });
 });
 
 app.post('/api/admin/config', adminAuth.requireAdmin, (req, res) => {
-  const { serpApiKey } = req.body || {};
+  const { serperApiKey } = req.body || {};
 
-  if (typeof serpApiKey !== 'string' || serpApiKey.trim().length === 0) {
-    return res.status(400).json({ error: 'Veuillez saisir une clé SerpApi valide.' });
+  if (typeof serperApiKey !== 'string' || serperApiKey.trim().length === 0) {
+    return res.status(400).json({ error: 'Veuillez saisir une clé Serper valide.' });
   }
 
-  if (process.env.SERPAPI_KEY) {
+  if (process.env.SERPER_API_KEY) {
     return res.status(409).json({
       error:
-        "La clé SerpApi est actuellement définie via la variable d'environnement SERPAPI_KEY, qui est prioritaire. Retirez-la du fichier .env pour pouvoir la gérer depuis cette page.",
+        "La clé Serper est actuellement définie via la variable d'environnement SERPER_API_KEY, qui est prioritaire. Retirez-la du fichier .env pour pouvoir la gérer depuis cette page.",
     });
   }
 
-  config.setSerpApiKey(serpApiKey.trim());
+  config.setSerperApiKey(serperApiKey.trim());
   res.json({ ok: true });
 });
 
@@ -134,7 +134,7 @@ app.listen(PORT, () => {
     console.log('========================================================');
     console.log(' Mot de passe administrateur généré automatiquement :');
     console.log(` ${password}`);
-    console.log(' Connectez-vous sur /admin pour configurer votre clé SerpApi.');
+    console.log(' Connectez-vous sur /admin pour configurer votre clé Serper.');
     console.log(' (Définissez ADMIN_PASSWORD dans .env pour choisir le vôtre.)');
     console.log('========================================================');
     console.log('');
