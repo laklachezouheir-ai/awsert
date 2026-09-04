@@ -144,28 +144,6 @@ h1, h2, h3 {
   text-align: center;
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-border);
-  color: var(--accent-hover);
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 22px;
-}
-
-.eyebrow .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--success);
-  box-shadow: 0 0 0 3px var(--success-soft);
-}
-
 .hero h1 {
   margin: 0 0 16px;
   font-size: 2.6rem;
