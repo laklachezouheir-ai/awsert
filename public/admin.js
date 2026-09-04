@@ -9,6 +9,8 @@ const keyStatus = document.getElementById('key-status');
 const logoutBtn = document.getElementById('logout-btn');
 const statusArea = document.getElementById('admin-status');
 
+const { t, tError } = window.i18n;
+
 function setStatus(message, type) {
   if (!message) {
     statusArea.hidden = true;
@@ -31,18 +33,18 @@ function showConfig(data) {
   configCard.hidden = false;
 
   if (data.hasKey) {
-    const sourceText = data.keySource === 'env' ? " (définie via la variable d'environnement SERPER_API_KEY)" : '';
-    keyStatus.textContent = `Clé active : ${data.maskedKey}${sourceText}`;
+    const sourceText = data.keySource === 'env' ? t('admin.key.envSuffix') : '';
+    keyStatus.textContent = t('admin.key.active', { masked: data.maskedKey, source: sourceText });
     keyPill.className = 'key-pill set';
   } else {
-    keyStatus.textContent = "Aucune clé Serper n'est configurée pour le moment.";
+    keyStatus.textContent = t('admin.key.none');
     keyPill.className = 'key-pill unset';
   }
 
   if (data.keySource === 'env') {
     keyInput.disabled = true;
     configForm.querySelector('button').disabled = true;
-    keyInput.placeholder = 'Gérée via SERPER_API_KEY dans .env';
+    keyInput.placeholder = t('admin.key.envPlaceholder');
   }
 }
 
@@ -69,7 +71,7 @@ loginForm.addEventListener('submit', async (event) => {
   const data = await response.json();
 
   if (!response.ok) {
-    setStatus(data.error || 'Connexion impossible.', 'error');
+    setStatus(tError(data.code, data.error) || t('admin.status.loginFailed'), 'error');
     return;
   }
 
@@ -83,7 +85,7 @@ configForm.addEventListener('submit', async (event) => {
 
   const serperApiKey = keyInput.value.trim();
   if (!serperApiKey) {
-    setStatus('Veuillez saisir une clé.', 'error');
+    setStatus(t('admin.status.needKey'), 'error');
     return;
   }
 
@@ -96,12 +98,12 @@ configForm.addEventListener('submit', async (event) => {
   const data = await response.json();
 
   if (!response.ok) {
-    setStatus(data.error || "Impossible d'enregistrer la clé.", 'error');
+    setStatus(tError(data.code, data.error) || t('admin.status.saveError'), 'error');
     return;
   }
 
   keyInput.value = '';
-  setStatus('Clé Serper enregistrée avec succès.', 'info');
+  setStatus(t('admin.status.saveSuccess'), 'info');
   await loadConfig();
 });
 

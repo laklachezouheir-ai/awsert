@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awsert — Comparateur de prix intelligent</title>
-  <meta name="description" content="Recherchez un ou plusieurs produits, Awsert interroge le web et compare les prix pour vous." />
+  <title>Awsert — Smart Price Comparison</title>
+  <meta name="description" content="Search one or more products, Awsert scans the web and compares prices for you." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236366f1'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,32 +19,36 @@
         <span class="logo-text">Awsert</span>
       </div>
       <nav class="nav-links">
-        <a href="#fonctionnalites">Fonctionnalités</a>
-        <a href="/admin" class="nav-cta">Administration</a>
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="/admin" class="nav-cta" data-i18n="nav.admin">Admin</a>
+        <div class="lang-switch">
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="fr">FR</button>
+        </div>
       </nav>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h1>Comparez les prix <span class="accent-text">en une recherche</span></h1>
-      <p class="subtitle">
-        Saisissez le nom d'un ou plusieurs produits, Awsert interroge le web
-        et vous retourne instantanément les meilleures offres du moment.
+      <h1><span data-i18n="hero.title.part1">Compare prices</span> <span class="accent-text" data-i18n="hero.title.accent">in one search</span></h1>
+      <p class="subtitle" data-i18n="hero.subtitle">
+        Enter one or more product names, Awsert searches the web and instantly returns the best deals.
       </p>
 
       <div class="search-card">
         <form id="search-form">
-          <label for="products-input">Produit(s) à rechercher</label>
+          <label for="products-input" data-i18n="search.label">Product(s) to search</label>
           <textarea
             id="products-input"
             rows="4"
-            placeholder="Ex : iPhone 15 128 Go&#10;Samsung Galaxy Buds 3&#10;Nintendo Switch OLED"
+            placeholder="e.g. iPhone 15 128GB&#10;Samsung Galaxy Buds 3&#10;Nintendo Switch OLED"
+            data-i18n-placeholder="search.placeholder"
             required
           ></textarea>
-          <button type="submit" id="search-btn">Rechercher les prix</button>
+          <button type="submit" id="search-btn" data-i18n="search.button">Search prices</button>
         </form>
-        <p class="hint">Un produit par ligne — jusqu'à 10 produits par recherche.</p>
+        <p class="hint" data-i18n="search.hint">One product per line — up to 10 products per search.</p>
       </div>
     </section>
 
@@ -52,41 +56,42 @@
 
     <section id="results" class="results"></section>
 
-    <section id="fonctionnalites" class="features">
+    <section id="features" class="features">
       <div class="feature-card">
         <span class="feature-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         </span>
-        <h3>Multi-produits</h3>
-        <p>Recherchez jusqu'à 10 produits en une seule fois et gagnez du temps sur vos comparaisons.</p>
+        <h3 data-i18n="features.multi.title">Multi-product</h3>
+        <p data-i18n="features.multi.desc">Search up to 10 products at once and save time comparing.</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </span>
-        <h3>Prix en temps réel</h3>
-        <p>Les offres proviennent directement de Google Shopping pour des prix à jour, marchand par marchand.</p>
+        <h3 data-i18n="features.realtime.title">Real-time prices</h3>
+        <p data-i18n="features.realtime.desc">Offers come straight from Google Shopping for up-to-date prices, merchant by merchant.</p>
       </div>
       <div class="feature-card">
         <span class="feature-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></svg>
         </span>
-        <h3>Meilleur prix mis en avant</h3>
-        <p>Awsert trie automatiquement les offres et met en évidence le prix le plus bas trouvé.</p>
+        <h3 data-i18n="features.best.title">Best price highlighted</h3>
+        <p data-i18n="features.best.desc">Awsert automatically sorts offers and highlights the lowest price found.</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>Awsert &middot; Recherche de prix propulsée par Google Shopping (Serper)</p>
+      <p data-i18n="footer.tagline">Awsert &middot; Price search powered by Google Shopping (Serper)</p>
       <div class="footer-links">
-        <a href="/admin">Administration</a>
+        <a href="/admin" data-i18n="nav.admin">Admin</a>
         <a href="https://serper.dev/" target="_blank" rel="noopener noreferrer">Serper</a>
       </div>
     </div>
   </footer>
 
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

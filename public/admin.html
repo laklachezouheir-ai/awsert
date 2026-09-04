@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awsert — Administration</title>
+  <title>Awsert — Admin</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236366f1'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,7 +18,11 @@
         <span class="logo-text">Awsert</span>
       </a>
       <nav class="nav-links">
-        <a href="/">Recherche</a>
+        <a href="/" data-i18n="nav.search">Search</a>
+        <div class="lang-switch">
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="fr">FR</button>
+        </div>
       </nav>
     </div>
   </header>
@@ -26,43 +30,43 @@
   <main class="container admin-main">
     <!-- Formulaire de connexion -->
     <section id="login-card" class="search-card admin-card" hidden>
-      <h1>Connexion administrateur</h1>
-      <p class="subtitle">
-        Le mot de passe est affiché dans les logs du serveur au premier
-        démarrage, ou correspond à la variable <code>ADMIN_PASSWORD</code>.
+      <h1 data-i18n="admin.login.title">Admin login</h1>
+      <p class="subtitle" data-i18n="admin.login.subtitle">
+        The password is shown in the server logs on first startup, or matches the ADMIN_PASSWORD variable.
       </p>
       <form id="login-form">
-        <label for="password-input">Mot de passe</label>
+        <label for="password-input" data-i18n="admin.login.label">Password</label>
         <input type="password" id="password-input" autocomplete="current-password" required />
-        <button type="submit">Se connecter</button>
+        <button type="submit" data-i18n="admin.login.button">Log in</button>
       </form>
     </section>
 
     <!-- Panneau de configuration -->
     <section id="config-card" class="search-card admin-card" hidden>
       <div class="admin-card-header">
-        <h1>Clé Serper</h1>
-        <button type="button" id="logout-btn" class="btn-secondary">Se déconnecter</button>
+        <h1 data-i18n="admin.config.title">Serper key</h1>
+        <button type="button" id="logout-btn" class="btn-secondary" data-i18n="admin.config.logout">Log out</button>
       </div>
-      <p class="subtitle">Cette clé permet à Awsert d'interroger Google Shopping (via Serper) pour récupérer les prix.</p>
+      <p class="subtitle" data-i18n="admin.config.subtitle">This key lets Awsert query Google Shopping (via Serper) to fetch prices.</p>
 
       <div id="key-pill" class="key-pill unset">
         <span class="key-dot"></span>
-        <span id="key-status">Chargement…</span>
+        <span id="key-status" data-i18n="admin.key.loading">Loading…</span>
       </div>
 
       <form id="config-form">
-        <label for="key-input">Nouvelle clé Serper</label>
+        <label for="key-input" data-i18n="admin.config.label">New Serper key</label>
         <input
           type="text"
           id="key-input"
-          placeholder="Collez votre clé Serper ici"
+          placeholder="Paste your Serper key here"
+          data-i18n-placeholder="admin.config.placeholder"
           autocomplete="off"
         />
-        <button type="submit">Enregistrer la clé</button>
+        <button type="submit" data-i18n="admin.config.button">Save key</button>
       </form>
       <p class="hint">
-        Obtenez une clé gratuite sur
+        <span data-i18n="admin.config.hintPrefix">Get a free key at</span>
         <a href="https://serper.dev/" target="_blank" rel="noopener noreferrer">serper.dev</a>.
       </p>
     </section>
@@ -72,10 +76,11 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p><a href="/">&larr; Retour à la recherche</a></p>
+      <p><a href="/" data-i18n="admin.footer.back">← Back to search</a></p>
     </div>
   </footer>
 
+  <script src="i18n.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

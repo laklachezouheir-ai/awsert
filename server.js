@@ -25,15 +25,17 @@ app.post('/api/search', async (req, res) => {
     .slice(0, MAX_PRODUCTS);
 
   if (products.length === 0) {
-    return res.status(400).json({ error: 'Veuillez saisir au moins un produit à rechercher.' });
+    return res
+      .status(400)
+      .json({ code: 'NO_PRODUCTS', error: 'Please enter at least one product to search.' });
   }
 
   const apiKey = config.getSerperApiKey();
 
   if (!apiKey) {
     return res.status(503).json({
-      error:
-        "Aucune clé Serper configurée. Rendez-vous sur /admin pour renseigner votre clé et activer la recherche de prix.",
+      code: 'NO_API_KEY',
+      error: 'No Serper key configured. Go to /admin to add your key and enable price search.',
     });
   }
 
@@ -41,10 +43,16 @@ app.post('/api/search', async (req, res) => {
     const results = await Promise.all(
       products.map(async (query) => {
         try {
-          const offers = await searchProductPrices(query, apiKey);
-          return { query, offers, error: null };
+          const { offers, location } = await searchProductPrices(query, apiKey);
+          return { query, offers, location, error: null, code: null };
         } catch (err) {
-          return { query, offers: [], error: err.message || 'Erreur inconnue lors de la recherche.' };
+          return {
+            query,
+            offers: [],
+            location: null,
+            error: err.message || 'Unknown error during search.',
+            code: err.code || null,
+          };
         }
       })
     );
@@ -52,7 +60,9 @@ app.post('/api/search', async (req, res) => {
     res.json({ results });
   } catch (err) {
     console.error('Erreur de recherche:', err);
-    res.status(500).json({ error: "Une erreur est survenue pendant la recherche des prix." });
+    res
+      .status(500)
+      .json({ code: 'SEARCH_ERROR', error: 'An error occurred while searching for prices.' });
   }
 });
 
@@ -75,7 +85,7 @@ app.post('/api/admin/login', (req, res) => {
   const submitted = typeof password === 'string' ? password.trim() : '';
 
   if (!submitted || !adminAuth.timingSafeEqualStrings(submitted, expected)) {
-    return res.status(401).json({ error: 'Mot de passe incorrect.' });
+    return res.status(401).json({ code: 'INVALID_PASSWORD', error: 'Incorrect password.' });
   }
 
   const token = adminAuth.createSession();
@@ -107,13 +117,14 @@ app.post('/api/admin/config', adminAuth.requireAdmin, (req, res) => {
   const { serperApiKey } = req.body || {};
 
   if (typeof serperApiKey !== 'string' || serperApiKey.trim().length === 0) {
-    return res.status(400).json({ error: 'Veuillez saisir une clé Serper valide.' });
+    return res.status(400).json({ code: 'INVALID_KEY', error: 'Please enter a valid Serper key.' });
   }
 
   if (process.env.SERPER_API_KEY) {
     return res.status(409).json({
+      code: 'KEY_ENV_LOCKED',
       error:
-        "La clé Serper est actuellement définie via la variable d'environnement SERPER_API_KEY, qui est prioritaire. Retirez-la du fichier .env pour pouvoir la gérer depuis cette page.",
+        'The Serper key is currently set via the SERPER_API_KEY environment variable, which takes priority. Remove it from .env to manage it from this page.',
     });
   }
 

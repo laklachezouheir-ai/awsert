@@ -4,6 +4,8 @@ const button = document.getElementById('search-btn');
 const statusArea = document.getElementById('status-area');
 const resultsEl = document.getElementById('results');
 
+const { t, tPlural, tError, getLocale } = window.i18n;
+
 function setStatus(message, type) {
   if (!message) {
     statusArea.hidden = true;
@@ -18,8 +20,9 @@ function setStatus(message, type) {
 
 function formatPrice(price, currency) {
   if (price === null || price === undefined) return null;
+  const numberLocale = getLocale() === 'fr' ? 'fr-FR' : 'en-US';
   try {
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat(numberLocale, {
       style: 'currency',
       currency: currency || 'EUR',
       maximumFractionDigits: 2,
@@ -59,7 +62,7 @@ function renderOffer(offer, isBest) {
 
   const priceEl = document.createElement('div');
   priceEl.className = 'offer-price';
-  priceEl.textContent = formatPrice(offer.price, offer.currency) || offer.priceText || 'Prix inconnu';
+  priceEl.textContent = formatPrice(offer.price, offer.currency) || offer.priceText || '—';
   right.appendChild(priceEl);
 
   if (offer.link) {
@@ -67,13 +70,29 @@ function renderOffer(offer, isBest) {
     link.href = offer.link;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.textContent = 'Voir l\'offre →';
+    link.textContent = t('results.viewOffer');
     right.appendChild(link);
   }
 
   li.appendChild(right);
 
   return li;
+}
+
+function countryCodeToFlag(code) {
+  if (!code) return '🌍';
+  return code
+    .toUpperCase()
+    .replace(/./g, (ch) => String.fromCodePoint(127397 + ch.charCodeAt(0)));
+}
+
+function countryDisplayName(code) {
+  if (!code) return t('results.international');
+  try {
+    return new Intl.DisplayNames([getLocale()], { type: 'region' }).of(code) || code;
+  } catch {
+    return code;
+  }
 }
 
 function renderProductBlock(result) {
@@ -87,19 +106,33 @@ function renderProductBlock(result) {
   heading.textContent = result.query;
   header.appendChild(heading);
 
+  const meta = document.createElement('div');
+  meta.className = 'header-meta';
+
+  if (result.location) {
+    const loc = document.createElement('span');
+    loc.className = 'location-tag';
+    loc.textContent = `${countryCodeToFlag(result.location.code)} ${countryDisplayName(result.location.code)}`;
+    meta.appendChild(loc);
+  }
+
   if (result.offers && result.offers.length > 0) {
     const count = document.createElement('span');
     count.className = 'offer-count';
-    count.textContent = `${result.offers.length} offre${result.offers.length > 1 ? 's' : ''} trouvée${result.offers.length > 1 ? 's' : ''}`;
-    header.appendChild(count);
+    count.textContent = tPlural('results.offerCount', result.offers.length);
+    meta.appendChild(count);
   }
+
+  header.appendChild(meta);
 
   block.appendChild(header);
 
   if (result.error) {
     const err = document.createElement('p');
     err.className = 'product-error';
-    err.textContent = `Erreur : ${result.error}`;
+    err.textContent = t('results.errorPrefix', {
+      message: tError(result.code, result.error, result.code === 'SEARCH_SERVICE_ERROR' ? { status: '' } : undefined),
+    });
     block.appendChild(err);
     return block;
   }
@@ -107,7 +140,7 @@ function renderProductBlock(result) {
   if (!result.offers || result.offers.length === 0) {
     const none = document.createElement('p');
     none.className = 'no-results';
-    none.textContent = 'Aucune offre trouvée pour ce produit.';
+    none.textContent = t('results.noOffers');
     block.appendChild(none);
     return block;
   }
@@ -117,7 +150,13 @@ function renderProductBlock(result) {
   if (bestPriceText) {
     const bestPrice = document.createElement('p');
     bestPrice.className = 'best-price';
-    bestPrice.innerHTML = `<span class="best-badge">Meilleur prix</span> ${bestPriceText} <span style="color:var(--text-muted);font-weight:500;font-size:0.9rem;">chez ${best.source}</span>`;
+    const badge = document.createElement('span');
+    badge.className = 'best-badge';
+    badge.textContent = t('results.bestPrice');
+    const at = document.createElement('span');
+    at.style.cssText = 'color:var(--text-muted);font-weight:500;font-size:0.9rem;';
+    at.textContent = t('results.at', { source: best.source });
+    bestPrice.append(badge, ` ${bestPriceText} `, at);
     block.appendChild(bestPrice);
   }
 
@@ -138,14 +177,14 @@ form.addEventListener('submit', async (event) => {
     .filter((line) => line.length > 0);
 
   if (products.length === 0) {
-    setStatus('Veuillez saisir au moins un produit.', 'error');
+    setStatus(t('status.needProduct'), 'error');
     return;
   }
 
   button.disabled = true;
-  button.textContent = 'Recherche en cours...';
+  button.textContent = t('search.buttonLoading');
   resultsEl.innerHTML = '';
-  setStatus(`Recherche des prix pour ${products.length} produit(s)...`, 'info');
+  setStatus(tPlural('status.searching', products.length), 'info');
 
   try {
     const response = await fetch('/api/search', {
@@ -157,7 +196,7 @@ form.addEventListener('submit', async (event) => {
     const data = await response.json();
 
     if (!response.ok) {
-      setStatus(data.error || 'Une erreur est survenue.', 'error');
+      setStatus(tError(data.code, data.error) || t('status.serverError'), 'error');
       return;
     }
 
@@ -165,16 +204,16 @@ form.addEventListener('submit', async (event) => {
 
     const label = document.createElement('p');
     label.className = 'section-label';
-    label.textContent = 'Résultats';
+    label.textContent = t('results.label');
     resultsEl.appendChild(label);
 
     data.results.forEach((result) => {
       resultsEl.appendChild(renderProductBlock(result));
     });
   } catch (err) {
-    setStatus('Impossible de contacter le serveur. Réessayez plus tard.', 'error');
+    setStatus(t('status.serverError'), 'error');
   } finally {
     button.disabled = false;
-    button.textContent = 'Rechercher les prix';
+    button.textContent = t('search.button');
   }
 });
