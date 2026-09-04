@@ -4,6 +4,7 @@ const loginForm = document.getElementById('login-form');
 const passwordInput = document.getElementById('password-input');
 const configForm = document.getElementById('config-form');
 const keyInput = document.getElementById('key-input');
+const keyPill = document.getElementById('key-pill');
 const keyStatus = document.getElementById('key-status');
 const logoutBtn = document.getElementById('logout-btn');
 const statusArea = document.getElementById('admin-status');
@@ -31,9 +32,11 @@ function showConfig(data) {
 
   if (data.hasKey) {
     const sourceText = data.keySource === 'env' ? " (définie via la variable d'environnement SERPAPI_KEY)" : '';
-    keyStatus.textContent = `Clé actuelle : ${data.maskedKey}${sourceText}`;
+    keyStatus.textContent = `Clé active : ${data.maskedKey}${sourceText}`;
+    keyPill.className = 'key-pill set';
   } else {
     keyStatus.textContent = "Aucune clé SerpApi n'est configurée pour le moment.";
+    keyPill.className = 'key-pill unset';
   }
 
   if (data.keySource === 'env') {

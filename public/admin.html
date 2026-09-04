@@ -4,16 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Awsert — Administration</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236366f1'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <div class="logo">
+      <a href="/" class="logo" style="text-decoration:none;color:inherit;">
         <span class="logo-mark">A</span>
         <span class="logo-text">Awsert</span>
-      </div>
-      <p class="tagline">Administration</p>
+      </a>
+      <nav class="nav-links">
+        <a href="/">Recherche</a>
+      </nav>
     </div>
   </header>
 
@@ -38,7 +44,12 @@
         <h1>Clé SerpApi</h1>
         <button type="button" id="logout-btn" class="btn-secondary">Se déconnecter</button>
       </div>
-      <p id="key-status" class="subtitle"></p>
+      <p class="subtitle">Cette clé permet à Awsert d'interroger Google Shopping pour récupérer les prix.</p>
+
+      <div id="key-pill" class="key-pill unset">
+        <span class="key-dot"></span>
+        <span id="key-status">Chargement…</span>
+      </div>
 
       <form id="config-form">
         <label for="key-input">Nouvelle clé SerpApi</label>

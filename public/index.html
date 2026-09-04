@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awsert — Comparateur de prix</title>
+  <title>Awsert — Comparateur de prix intelligent</title>
+  <meta name="description" content="Recherchez un ou plusieurs produits, Awsert interroge le web et compare les prix pour vous." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236366f1'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,41 +18,73 @@
         <span class="logo-mark">A</span>
         <span class="logo-text">Awsert</span>
       </div>
-      <p class="tagline">Trouvez le meilleur prix, en une recherche.</p>
+      <nav class="nav-links">
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="/admin" class="nav-cta">Administration</a>
+      </nav>
     </div>
   </header>
 
   <main class="container">
     <section class="hero">
-      <h1>Comparez les prix d'un ou plusieurs produits</h1>
+      <span class="eyebrow"><span class="dot"></span> Résultats en direct via Google Shopping</span>
+      <h1>Comparez les prix <span class="accent-text">en une recherche</span></h1>
       <p class="subtitle">
-        Saisissez le nom d'un produit par ligne. Awsert interroge le web et vous
-        retourne les meilleures offres trouvées.
+        Saisissez le nom d'un ou plusieurs produits, Awsert interroge le web
+        et vous retourne instantanément les meilleures offres du moment.
       </p>
-    </section>
 
-    <section class="search-card">
-      <form id="search-form">
-        <label for="products-input">Produit(s) à rechercher</label>
-        <textarea
-          id="products-input"
-          rows="4"
-          placeholder="Ex : iPhone 15 128 Go&#10;Samsung Galaxy Buds 3&#10;Nintendo Switch OLED"
-          required
-        ></textarea>
-        <button type="submit" id="search-btn">Rechercher les prix</button>
-      </form>
-      <p class="hint">Un produit par ligne — jusqu'à 10 produits par recherche.</p>
+      <div class="search-card">
+        <form id="search-form">
+          <label for="products-input">Produit(s) à rechercher</label>
+          <textarea
+            id="products-input"
+            rows="4"
+            placeholder="Ex : iPhone 15 128 Go&#10;Samsung Galaxy Buds 3&#10;Nintendo Switch OLED"
+            required
+          ></textarea>
+          <button type="submit" id="search-btn">Rechercher les prix</button>
+        </form>
+        <p class="hint">Un produit par ligne — jusqu'à 10 produits par recherche.</p>
+      </div>
     </section>
 
     <section id="status-area" class="status-area" hidden></section>
 
     <section id="results" class="results"></section>
+
+    <section id="fonctionnalites" class="features">
+      <div class="feature-card">
+        <span class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </span>
+        <h3>Multi-produits</h3>
+        <p>Recherchez jusqu'à 10 produits en une seule fois et gagnez du temps sur vos comparaisons.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </span>
+        <h3>Prix en temps réel</h3>
+        <p>Les offres proviennent directement de Google Shopping pour des prix à jour, marchand par marchand.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></svg>
+        </span>
+        <h3>Meilleur prix mis en avant</h3>
+        <p>Awsert trie automatiquement les offres et met en évidence le prix le plus bas trouvé.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
+    <div class="container footer-inner">
       <p>Awsert &middot; Recherche de prix propulsée par Google Shopping (SerpApi)</p>
+      <div class="footer-links">
+        <a href="/admin">Administration</a>
+        <a href="https://serpapi.com/" target="_blank" rel="noopener noreferrer">SerpApi</a>
+      </div>
     </div>
   </footer>
 

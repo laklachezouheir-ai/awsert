@@ -29,9 +29,9 @@ function formatPrice(price, currency) {
   }
 }
 
-function renderOffer(offer) {
+function renderOffer(offer, isBest) {
   const li = document.createElement('li');
-  li.className = 'offer';
+  li.className = isBest ? 'offer is-best' : 'offer';
 
   const img = document.createElement('img');
   img.src = offer.thumbnail || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="44" height="44"%3E%3Crect width="44" height="44" fill="%23ddd"/%3E%3C/svg%3E';
@@ -52,21 +52,26 @@ function renderOffer(offer) {
   source.textContent = offer.source;
   info.appendChild(source);
 
+  li.appendChild(info);
+
+  const right = document.createElement('div');
+  right.className = 'offer-right';
+
+  const priceEl = document.createElement('div');
+  priceEl.className = 'offer-price';
+  priceEl.textContent = formatPrice(offer.price, offer.currency) || offer.priceText || 'Prix inconnu';
+  right.appendChild(priceEl);
+
   if (offer.link) {
     const link = document.createElement('a');
     link.href = offer.link;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
     link.textContent = 'Voir l\'offre →';
-    info.appendChild(link);
+    right.appendChild(link);
   }
 
-  li.appendChild(info);
-
-  const priceEl = document.createElement('div');
-  priceEl.className = 'offer-price';
-  priceEl.textContent = formatPrice(offer.price, offer.currency) || offer.priceText || 'Prix inconnu';
-  li.appendChild(priceEl);
+  li.appendChild(right);
 
   return li;
 }
@@ -75,9 +80,21 @@ function renderProductBlock(result) {
   const block = document.createElement('article');
   block.className = 'product-block';
 
+  const header = document.createElement('div');
+  header.className = 'product-block-header';
+
   const heading = document.createElement('h2');
   heading.textContent = result.query;
-  block.appendChild(heading);
+  header.appendChild(heading);
+
+  if (result.offers && result.offers.length > 0) {
+    const count = document.createElement('span');
+    count.className = 'offer-count';
+    count.textContent = `${result.offers.length} offre${result.offers.length > 1 ? 's' : ''} trouvée${result.offers.length > 1 ? 's' : ''}`;
+    header.appendChild(count);
+  }
+
+  block.appendChild(header);
 
   if (result.error) {
     const err = document.createElement('p');
@@ -100,13 +117,13 @@ function renderProductBlock(result) {
   if (bestPriceText) {
     const bestPrice = document.createElement('p');
     bestPrice.className = 'best-price';
-    bestPrice.textContent = `Meilleur prix trouvé : ${bestPriceText} (${best.source})`;
+    bestPrice.innerHTML = `<span class="best-badge">Meilleur prix</span> ${bestPriceText} <span style="color:var(--text-muted);font-weight:500;font-size:0.9rem;">chez ${best.source}</span>`;
     block.appendChild(bestPrice);
   }
 
   const list = document.createElement('ul');
   list.className = 'offer-list';
-  result.offers.forEach((offer) => list.appendChild(renderOffer(offer)));
+  result.offers.forEach((offer, index) => list.appendChild(renderOffer(offer, index === 0)));
   block.appendChild(list);
 
   return block;
@@ -145,6 +162,12 @@ form.addEventListener('submit', async (event) => {
     }
 
     setStatus(null);
+
+    const label = document.createElement('p');
+    label.className = 'section-label';
+    label.textContent = 'Résultats';
+    resultsEl.appendChild(label);
+
     data.results.forEach((result) => {
       resultsEl.appendChild(renderProductBlock(result));
     });
