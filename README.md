@@ -66,6 +66,38 @@ Pour le développement avec rechargement automatique :
 npm run dev
 ```
 
+## Déploiement sur Render
+
+Le dépôt contient un fichier `render.yaml` (Blueprint Render) prêt à l'emploi.
+
+1. Sur [render.com](https://render.com), crée un compte puis clique sur
+   **New +** → **Blueprint**.
+2. Connecte ce dépôt GitHub (`laklachezouheir-ai/awsert`) et sélectionne la
+   branche à déployer.
+3. Render détecte `render.yaml` et propose de créer le service web `awsert`
+   (build : `npm install`, démarrage : `npm start`).
+4. Avant de valider, renseigne les variables d'environnement demandées :
+   - `SERPAPI_KEY` : ta clé SerpApi
+   - `ADMIN_PASSWORD` : le mot de passe que tu veux utiliser pour `/admin`
+5. Clique sur **Apply** / **Create Web Service**. Render build et démarre
+   l'app, puis fournit une URL publique du type
+   `https://awsert-xxxx.onrender.com`.
+
+Si tu préfères créer le service manuellement (sans Blueprint) : **New +** →
+**Web Service**, connecte le dépôt, puis renseigne toi-même *Build Command*
+(`npm install`) et *Start Command* (`npm start`).
+
+**⚠️ Important — disque non persistant** : sur Render, le système de
+fichiers d'un service web est réinitialisé à chaque déploiement et à chaque
+redémarrage (y compris la mise en veille automatique du plan gratuit après
+inactivité). Toute clé enregistrée uniquement via la page `/admin`
+(stockée dans `data/config.json`) sera donc perdue au prochain redémarrage.
+**Sur Render, définis `SERPAPI_KEY` et `ADMIN_PASSWORD` comme variables
+d'environnement** (étape 4 ci-dessus) plutôt que de compter sur `/admin`
+pour la persistance — la page `/admin` reste utilisable pour vérifier la
+configuration, mais devient alors en lecture seule (la clé étant définie
+via l'environnement).
+
 ## Utilisation
 
 1. Saisissez un nom de produit par ligne dans le champ de recherche (jusqu'à
