@@ -1,0 +1,16 @@
+{
+  "name": "awsert",
+  "version": "1.0.0",
+  "description": "Awsert - recherchez un produit, comparez les prix trouves sur internet.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

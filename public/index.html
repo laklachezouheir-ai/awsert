@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Awsert — Comparateur de prix</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">Awsert</span>
+      </div>
+      <p class="tagline">Trouvez le meilleur prix, en une recherche.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Comparez les prix d'un ou plusieurs produits</h1>
+      <p class="subtitle">
+        Saisissez le nom d'un produit par ligne. Awsert interroge le web et vous
+        retourne les meilleures offres trouvées.
+      </p>
+    </section>
+
+    <section class="search-card">
+      <form id="search-form">
+        <label for="products-input">Produit(s) à rechercher</label>
+        <textarea
+          id="products-input"
+          rows="4"
+          placeholder="Ex : iPhone 15 128 Go&#10;Samsung Galaxy Buds 3&#10;Nintendo Switch OLED"
+          required
+        ></textarea>
+        <button type="submit" id="search-btn">Rechercher les prix</button>
+      </form>
+      <p class="hint">Un produit par ligne — jusqu'à 10 produits par recherche.</p>
+    </section>
+
+    <section id="status-area" class="status-area" hidden></section>
+
+    <section id="results" class="results"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Awsert &middot; Recherche de prix propulsée par Google Shopping (SerpApi)</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
