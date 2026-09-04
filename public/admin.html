@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Awsert — Administration</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">A</span>
+        <span class="logo-text">Awsert</span>
+      </div>
+      <p class="tagline">Administration</p>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <!-- Formulaire de connexion -->
+    <section id="login-card" class="search-card admin-card" hidden>
+      <h1>Connexion administrateur</h1>
+      <p class="subtitle">
+        Le mot de passe est affiché dans les logs du serveur au premier
+        démarrage, ou correspond à la variable <code>ADMIN_PASSWORD</code>.
+      </p>
+      <form id="login-form">
+        <label for="password-input">Mot de passe</label>
+        <input type="password" id="password-input" autocomplete="current-password" required />
+        <button type="submit">Se connecter</button>
+      </form>
+    </section>
+
+    <!-- Panneau de configuration -->
+    <section id="config-card" class="search-card admin-card" hidden>
+      <div class="admin-card-header">
+        <h1>Clé SerpApi</h1>
+        <button type="button" id="logout-btn" class="btn-secondary">Se déconnecter</button>
+      </div>
+      <p id="key-status" class="subtitle"></p>
+
+      <form id="config-form">
+        <label for="key-input">Nouvelle clé SerpApi</label>
+        <input
+          type="text"
+          id="key-input"
+          placeholder="Collez votre clé SerpApi ici"
+          autocomplete="off"
+        />
+        <button type="submit">Enregistrer la clé</button>
+      </form>
+      <p class="hint">
+        Obtenez une clé gratuite sur
+        <a href="https://serpapi.com/" target="_blank" rel="noopener noreferrer">serpapi.com</a>.
+      </p>
+    </section>
+
+    <section id="admin-status" class="status-area" hidden></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><a href="/">&larr; Retour à la recherche</a></p>
+    </div>
+  </footer>
+
+  <script src="admin.js"></script>
+</body>
+</html>
