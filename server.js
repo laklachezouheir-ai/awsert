@@ -56,9 +56,14 @@ app.post('/api/search', async (req, res) => {
   }
 });
 
-// Route de santé simple, utile pour le monitoring.
+// Route de santé simple, utile pour le monitoring et le diagnostic.
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', hasApiKey: Boolean(config.getSerpApiKey()) });
+  const { source: adminPasswordSource } = config.getAdminPassword();
+  res.json({
+    status: 'ok',
+    hasApiKey: Boolean(config.getSerpApiKey()),
+    adminPasswordSource, // 'env' si ADMIN_PASSWORD est définie, 'generated' sinon
+  });
 });
 
 // --- Administration : connexion + configuration de la clé SerpApi ---
@@ -67,7 +72,9 @@ app.post('/api/admin/login', (req, res) => {
   const { password } = req.body || {};
   const { password: expected } = config.getAdminPassword();
 
-  if (typeof password !== 'string' || !adminAuth.timingSafeEqualStrings(password, expected)) {
+  const submitted = typeof password === 'string' ? password.trim() : '';
+
+  if (!submitted || !adminAuth.timingSafeEqualStrings(submitted, expected)) {
     return res.status(401).json({ error: 'Mot de passe incorrect.' });
   }
 
