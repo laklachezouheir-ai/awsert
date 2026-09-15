@@ -1,20 +1,50 @@
 require('dotenv').config();
 
+const fs = require('fs');
 const express = require('express');
 const path = require('path');
 
 const { searchProductPrices } = require('./lib/priceSearch');
 const config = require('./lib/config');
 const adminAuth = require('./lib/adminAuth');
+const { isValidHexColor, escapeHtml, getInitial } = require('./lib/color');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Nombre maximum de produits qu'un utilisateur peut soumettre en une seule requête.
 const MAX_PRODUCTS = 10;
+
+/**
+ * Sert une page HTML de public/ en y injectant la personnalisation de marque
+ * (nom du site, couleur d'accent) directement côté serveur : pas de flash de
+ * contenu par défaut, et ça fonctionne même sans JavaScript.
+ */
+function renderBrandedPage(res, fileName) {
+  const branding = config.getBranding();
+  const siteName = escapeHtml(branding.siteName);
+  const initial = getInitial(branding.siteName);
+
+  let html = fs.readFileSync(path.join(__dirname, 'public', fileName), 'utf8');
+  html = html
+    .replaceAll('{{SITE_NAME}}', siteName)
+    .replaceAll('{{SITE_INITIAL}}', initial)
+    .replaceAll('{{ACCENT_COLOR}}', branding.accentColor)
+    .replaceAll('{{ACCENT_HOVER}}', branding.accentHover)
+    .replaceAll('{{ACCENT_SOFT}}', branding.accentSoft)
+    .replaceAll('{{ACCENT_BORDER}}', branding.accentBorder);
+
+  res.type('html').send(html);
+}
+
+app.get('/', (_req, res) => renderBrandedPage(res, 'index.html'));
+app.get('/index.html', (_req, res) => renderBrandedPage(res, 'index.html'));
+app.get('/admin', (_req, res) => renderBrandedPage(res, 'admin.html'));
+app.get('/admin.html', (_req, res) => renderBrandedPage(res, 'admin.html'));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/search', async (req, res) => {
   const rawProducts = Array.isArray(req.body?.products) ? req.body.products : [];
@@ -132,12 +162,57 @@ app.post('/api/admin/config', adminAuth.requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/admin', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+// --- Personnalisation : nom du site et couleur d'accent ---
+
+// Public : permet au frontend (i18n, textes dynamiques) de connaître le nom
+// du site sans être authentifié.
+app.get('/api/branding', (_req, res) => {
+  const { siteName, accentColor } = config.getBranding();
+  res.json({ siteName, accentColor });
+});
+
+app.get('/api/admin/branding', adminAuth.requireAdmin, (_req, res) => {
+  const { siteName, accentColor } = config.getBranding();
+  res.json({ siteName, accentColor });
+});
+
+app.post('/api/admin/branding', adminAuth.requireAdmin, (req, res) => {
+  const { siteName, accentColor } = req.body || {};
+  const updates = {};
+
+  if (siteName !== undefined) {
+    const trimmed = typeof siteName === 'string' ? siteName.trim() : '';
+    if (!trimmed || trimmed.length > 40) {
+      return res.status(400).json({
+        code: 'INVALID_SITE_NAME',
+        error: 'Site name must be between 1 and 40 characters.',
+      });
+    }
+    updates.siteName = trimmed;
+  }
+
+  if (accentColor !== undefined) {
+    if (!isValidHexColor(accentColor)) {
+      return res.status(400).json({
+        code: 'INVALID_COLOR',
+        error: 'Accent color must be a hex value like #5b7c99.',
+      });
+    }
+    updates.accentColor = accentColor;
+  }
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ code: 'NO_CHANGES', error: 'Nothing to update.' });
+  }
+
+  config.setBranding(updates);
+  const { siteName: newSiteName, accentColor: newAccentColor } = config.getBranding();
+  res.json({ ok: true, siteName: newSiteName, accentColor: newAccentColor });
 });
 
 app.listen(PORT, () => {
-  console.log(`Awsert est lancé sur http://localhost:${PORT}`);
+  const { siteName } = config.getBranding();
+  console.log(`${siteName} est lancé sur http://localhost:${PORT}`);
 
   const { password, generated } = config.getAdminPassword();
   if (generated) {

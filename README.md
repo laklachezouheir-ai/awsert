@@ -66,6 +66,18 @@ Pour le développement avec rechargement automatique :
 npm run dev
 ```
 
+## Personnalisation (nom du site, couleur) — page d'administration
+
+Toujours sur `/admin`, une section **Branding** permet de changer le nom du
+site (affiché dans l'en-tête, l'onglet du navigateur, le favicon et le pied
+de page) ainsi que la couleur d'accent (boutons, liens, badges) — sans
+toucher au code. Le changement s'applique instantanément sur tout le site,
+dès l'enregistrement.
+
+Ces informations sont stockées dans `data/config.json` (comme la clé
+Serper) — voir l'avertissement sur le disque non persistant de Render
+ci-dessous si vous déployez en ligne.
+
 ## Déploiement sur Render
 
 Le dépôt contient un fichier `render.yaml` (Blueprint Render) prêt à l'emploi.
@@ -125,15 +137,18 @@ awsert/
 ├── server.js              # Serveur Express : /api/search, /api/health, /api/admin/*
 ├── lib/
 │   ├── priceSearch.js     # Appel à Serper (Google Shopping) et normalisation des résultats
-│   ├── config.js          # Lecture/écriture de la clé Serper et du mot de passe admin
+│   ├── locationDetect.js  # Détection du pays mentionné dans une requête
+│   ├── config.js          # Lecture/écriture de la clé Serper, du mot de passe admin et du branding
+│   ├── color.js           # Utilitaires couleur (teintes dérivées) et échappement HTML
 │   └── adminAuth.js       # Sessions et middleware d'authentification admin
 ├── public/
-│   ├── index.html         # Page de recherche
+│   ├── index.html         # Page de recherche (rendue avec le branding par le serveur)
 │   ├── admin.html         # Page d'administration (/admin)
 │   ├── style.css
+│   ├── i18n.js            # Traductions EN/FR
 │   ├── app.js
 │   └── admin.js
-├── data/                  # Config locale générée (clé, mot de passe) — non versionné
+├── data/                  # Config locale générée (clé, mot de passe, branding) — non versionné
 ├── .env.example
 └── package.json
 ```

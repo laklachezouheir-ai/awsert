@@ -3,20 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awsert — Smart Price Comparison</title>
-  <meta name="description" content="Search one or more products, Awsert scans the web and compares prices for you." />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%235b7c99'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <title>{{SITE_NAME}} — Smart Price Comparison</title>
+  <meta name="description" content="Search one or more products, {{SITE_NAME}} scans the web and compares prices for you." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23{{ACCENT_COLOR_HEX}}'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3E{{SITE_INITIAL}}%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --accent: {{ACCENT_COLOR}};
+      --accent-hover: {{ACCENT_HOVER}};
+      --accent-soft: {{ACCENT_SOFT}};
+      --accent-border: {{ACCENT_BORDER}};
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
       <div class="logo">
-        <span class="logo-mark">A</span>
-        <span class="logo-text">Awsert</span>
+        <span class="logo-mark">{{SITE_INITIAL}}</span>
+        <span class="logo-text">{{SITE_NAME}}</span>
       </div>
       <nav class="nav-links">
         <a href="#features" data-i18n="nav.features">Features</a>
@@ -33,7 +41,7 @@
     <section class="hero">
       <h1><span data-i18n="hero.title.part1">Compare prices</span> <span class="accent-text" data-i18n="hero.title.accent">in one search</span></h1>
       <p class="subtitle" data-i18n="hero.subtitle">
-        Enter one or more product names, Awsert searches the web and instantly returns the best deals.
+        Enter one or more product names and instantly get the best deals found across the web.
       </p>
 
       <div class="search-card">
@@ -76,14 +84,14 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></svg>
         </span>
         <h3 data-i18n="features.best.title">Best price highlighted</h3>
-        <p data-i18n="features.best.desc">Awsert automatically sorts offers and highlights the lowest price found.</p>
+        <p data-i18n="features.best.desc">Offers are automatically sorted, with the lowest price highlighted.</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p data-i18n="footer.tagline">Awsert &middot; Price search powered by Google Shopping (Serper)</p>
+      <p><strong>{{SITE_NAME}}</strong> <span data-i18n="footer.tagline">&middot; Price search powered by Google Shopping (Serper)</span></p>
       <div class="footer-links">
         <a href="/admin" data-i18n="nav.admin">Admin</a>
         <a href="https://serper.dev/" target="_blank" rel="noopener noreferrer">Serper</a>

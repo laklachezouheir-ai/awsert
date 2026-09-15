@@ -15,7 +15,7 @@
       'hero.title.part1': 'Compare prices',
       'hero.title.accent': 'in one search',
       'hero.subtitle':
-        'Enter one or more product names, Awsert searches the web and instantly returns the best deals.',
+        'Enter one or more product names and instantly get the best deals found across the web.',
 
       'search.label': 'Product(s) to search',
       'search.placeholder': 'e.g. iPhone 15 128GB\nSamsung Galaxy Buds 3\nNintendo Switch OLED',
@@ -29,9 +29,9 @@
       'features.realtime.desc':
         'Offers come straight from Google Shopping for up-to-date prices, merchant by merchant.',
       'features.best.title': 'Best price highlighted',
-      'features.best.desc': 'Awsert automatically sorts offers and highlights the lowest price found.',
+      'features.best.desc': 'Offers are automatically sorted, with the lowest price highlighted.',
 
-      'footer.tagline': 'Awsert · Price search powered by Google Shopping (Serper)',
+      'footer.tagline': '· Price search powered by Google Shopping (Serper)',
 
       'results.label': 'Results',
       'results.offerCount_one': '{n} offer found',
@@ -57,13 +57,19 @@
       'admin.config.title': 'Serper key',
       'admin.config.logout': 'Log out',
       'admin.config.subtitle':
-        "This key lets Awsert query Google Shopping (via Serper) to fetch prices.",
+        'This key lets the app query Google Shopping (via Serper) to fetch prices.',
       'admin.config.label': 'New Serper key',
       'admin.config.placeholder': 'Paste your Serper key here',
       'admin.config.button': 'Save key',
       'admin.config.hintPrefix': 'Get a free key at',
 
       'admin.footer.back': '← Back to search',
+
+      'admin.branding.title': 'Branding',
+      'admin.branding.subtitle': "Customize your site's name and accent color — applied instantly, everywhere.",
+      'admin.branding.nameLabel': 'Site name',
+      'admin.branding.colorLabel': 'Accent color',
+      'admin.branding.button': 'Save branding',
 
       'admin.key.active': 'Active key: {masked}{source}',
       'admin.key.envSuffix': ' (set via the SERPER_API_KEY environment variable)',
@@ -75,6 +81,7 @@
       'admin.status.needKey': 'Please enter a key.',
       'admin.status.saveError': 'Could not save the key.',
       'admin.status.saveSuccess': 'Serper key saved successfully.',
+      'admin.status.brandingSaveSuccess': 'Branding saved. Reloading…',
 
       // Traductions des codes d'erreur renvoyés par le serveur (langue par défaut : anglais,
       // donc identiques au message serveur — présents pour compléter le mapping).
@@ -87,6 +94,9 @@
         'The Serper key is currently set via the SERPER_API_KEY environment variable, which takes priority. Remove it from .env to manage it from this page.',
       'error.FETCH_FAILED': 'Could not reach the price search service.',
       'error.SEARCH_SERVICE_ERROR': 'The search service responded with an error ({status}).',
+      'error.INVALID_SITE_NAME': 'Site name must be between 1 and 40 characters.',
+      'error.INVALID_COLOR': 'Accent color must be a hex value like #5b7c99.',
+      'error.NO_CHANGES': 'Nothing to update.',
     },
     fr: {
       'nav.features': 'Fonctionnalités',
@@ -96,7 +106,7 @@
       'hero.title.part1': 'Comparez les prix',
       'hero.title.accent': 'en une recherche',
       'hero.subtitle':
-        "Saisissez le nom d'un ou plusieurs produits, Awsert interroge le web et vous retourne instantanément les meilleures offres du moment.",
+        "Saisissez le nom d'un ou plusieurs produits et obtenez instantanément les meilleures offres trouvées sur le web.",
 
       'search.label': 'Produit(s) à rechercher',
       'search.placeholder': 'Ex : iPhone 15 128 Go\nSamsung Galaxy Buds 3\nNintendo Switch OLED',
@@ -112,9 +122,9 @@
         'Les offres proviennent directement de Google Shopping pour des prix à jour, marchand par marchand.',
       'features.best.title': 'Meilleur prix mis en avant',
       'features.best.desc':
-        'Awsert trie automatiquement les offres et met en évidence le prix le plus bas trouvé.',
+        'Les offres sont triées automatiquement, avec le prix le plus bas mis en évidence.',
 
-      'footer.tagline': 'Awsert · Recherche de prix propulsée par Google Shopping (Serper)',
+      'footer.tagline': '· Recherche de prix propulsée par Google Shopping (Serper)',
 
       'results.label': 'Résultats',
       'results.offerCount_one': '{n} offre trouvée',
@@ -140,13 +150,19 @@
       'admin.config.title': 'Clé Serper',
       'admin.config.logout': 'Se déconnecter',
       'admin.config.subtitle':
-        "Cette clé permet à Awsert d'interroger Google Shopping (via Serper) pour récupérer les prix.",
+        "Cette clé permet à l'application d'interroger Google Shopping (via Serper) pour récupérer les prix.",
       'admin.config.label': 'Nouvelle clé Serper',
       'admin.config.placeholder': 'Collez votre clé Serper ici',
       'admin.config.button': 'Enregistrer la clé',
       'admin.config.hintPrefix': 'Obtenez une clé gratuite sur',
 
       'admin.footer.back': '← Retour à la recherche',
+
+      'admin.branding.title': 'Personnalisation',
+      'admin.branding.subtitle': "Personnalisez le nom de votre site et sa couleur d'accent — appliqué instantanément, partout.",
+      'admin.branding.nameLabel': 'Nom du site',
+      'admin.branding.colorLabel': "Couleur d'accent",
+      'admin.branding.button': 'Enregistrer',
 
       'admin.key.active': 'Clé active : {masked}{source}',
       'admin.key.envSuffix': " (définie via la variable d'environnement SERPER_API_KEY)",
@@ -158,6 +174,7 @@
       'admin.status.needKey': 'Veuillez saisir une clé.',
       'admin.status.saveError': "Impossible d'enregistrer la clé.",
       'admin.status.saveSuccess': 'Clé Serper enregistrée avec succès.',
+      'admin.status.brandingSaveSuccess': 'Personnalisation enregistrée. Rechargement…',
 
       'error.NO_PRODUCTS': 'Veuillez saisir au moins un produit à rechercher.',
       'error.NO_API_KEY':
@@ -169,6 +186,9 @@
         "La clé Serper est actuellement définie via la variable d'environnement SERPER_API_KEY, qui est prioritaire. Retirez-la du fichier .env pour pouvoir la gérer depuis cette page.",
       'error.FETCH_FAILED': 'Impossible de contacter le service de recherche de prix.',
       'error.SEARCH_SERVICE_ERROR': 'Le service de recherche a répondu avec une erreur ({status}).',
+      'error.INVALID_SITE_NAME': 'Le nom du site doit contenir entre 1 et 40 caractères.',
+      'error.INVALID_COLOR': "La couleur d'accent doit être une valeur hexadécimale, ex : #5b7c99.",
+      'error.NO_CHANGES': 'Rien à mettre à jour.',
     },
   };
 

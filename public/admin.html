@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Awsert — Admin</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%235b7c99'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <title>{{SITE_NAME}} — Admin</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23{{ACCENT_COLOR_HEX}}'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='17' fill='white' text-anchor='middle'%3E{{SITE_INITIAL}}%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --accent: {{ACCENT_COLOR}};
+      --accent-hover: {{ACCENT_HOVER}};
+      --accent-soft: {{ACCENT_SOFT}};
+      --accent-border: {{ACCENT_BORDER}};
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
       <a href="/" class="logo" style="text-decoration:none;color:inherit;">
-        <span class="logo-mark">A</span>
-        <span class="logo-text">Awsert</span>
+        <span class="logo-mark">{{SITE_INITIAL}}</span>
+        <span class="logo-text">{{SITE_NAME}}</span>
       </a>
       <nav class="nav-links">
         <a href="/" data-i18n="nav.search">Search</a>
@@ -41,13 +49,34 @@
       </form>
     </section>
 
+    <!-- Personnalisation (nom du site, couleur d'accent) -->
+    <section id="branding-card" class="search-card admin-card" hidden>
+      <div class="admin-card-header">
+        <h1 data-i18n="admin.branding.title">Branding</h1>
+        <button type="button" id="logout-btn" class="btn-secondary" data-i18n="admin.config.logout">Log out</button>
+      </div>
+      <p class="subtitle" data-i18n="admin.branding.subtitle">Customize your site's name and accent color — applied instantly, everywhere.</p>
+
+      <form id="branding-form">
+        <label for="site-name-input" data-i18n="admin.branding.nameLabel">Site name</label>
+        <input type="text" id="site-name-input" maxlength="40" autocomplete="off" required />
+
+        <label for="accent-color-text" data-i18n="admin.branding.colorLabel">Accent color</label>
+        <div class="color-field">
+          <input type="color" id="accent-color-input" aria-label="Accent color picker" />
+          <input type="text" id="accent-color-text" maxlength="7" autocomplete="off" placeholder="#5b7c99" />
+        </div>
+
+        <button type="submit" data-i18n="admin.branding.button">Save branding</button>
+      </form>
+    </section>
+
     <!-- Panneau de configuration -->
     <section id="config-card" class="search-card admin-card" hidden>
       <div class="admin-card-header">
         <h1 data-i18n="admin.config.title">Serper key</h1>
-        <button type="button" id="logout-btn" class="btn-secondary" data-i18n="admin.config.logout">Log out</button>
       </div>
-      <p class="subtitle" data-i18n="admin.config.subtitle">This key lets Awsert query Google Shopping (via Serper) to fetch prices.</p>
+      <p class="subtitle" data-i18n="admin.config.subtitle">This key lets the app query Google Shopping (via Serper) to fetch prices.</p>
 
       <div id="key-pill" class="key-pill unset">
         <span class="key-dot"></span>

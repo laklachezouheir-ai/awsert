@@ -611,6 +611,26 @@ button:disabled {
   margin-bottom: 4px;
 }
 
+.color-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-field input[type='color'] {
+  width: 48px;
+  height: 44px;
+  padding: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.color-field input[type='text'] {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  text-transform: lowercase;
+}
+
 .key-pill {
   display: inline-flex;
   align-items: center;
