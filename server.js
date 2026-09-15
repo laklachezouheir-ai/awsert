@@ -212,19 +212,19 @@ app.post('/api/admin/branding', adminAuth.requireAdmin, (req, res) => {
 
 app.listen(PORT, () => {
   const { siteName } = config.getBranding();
-  console.log(`${siteName} est lancé sur http://localhost:${PORT}`);
+  console.log(`${siteName} is running on http://localhost:${PORT}`);
 
   const { password, generated } = config.getAdminPassword();
   if (generated) {
     console.log('');
     console.log('========================================================');
-    console.log(' Mot de passe administrateur généré automatiquement :');
+    console.log(' Auto-generated admin password:');
     console.log(` ${password}`);
-    console.log(' Connectez-vous sur /admin pour configurer votre clé Serper.');
-    console.log(' (Définissez ADMIN_PASSWORD dans .env pour choisir le vôtre.)');
+    console.log(' Log in at /admin to configure your Serper key and branding.');
+    console.log(' (Set ADMIN_PASSWORD in .env to choose your own.)');
     console.log('========================================================');
     console.log('');
   } else {
-    console.log('Page d\'administration disponible sur /admin.');
+    console.log('Admin panel available at /admin.');
   }
 });
