@@ -80,10 +80,10 @@ The repo includes a ready-to-use `render.yaml` file (Render Blueprint).
 
 1. On [render.com](https://render.com), create an account, then click
    **New +** → **Blueprint**.
-2. Connect this GitHub repo (`laklachezouheir-ai/awsert`) and select the
-   branch to deploy.
-3. Render detects `render.yaml` and offers to create the `awsert` web
-   service (build: `npm install`, start: `npm start`).
+2. Connect your GitHub repository (push this project to your own repo first)
+   and select the branch to deploy.
+3. Render detects `render.yaml` and offers to create the web service
+   (build: `npm install`, start: `npm start`).
 4. Before confirming, fill in the requested environment variables:
    - `SERPER_API_KEY`: your Serper key
    - `ADMIN_PASSWORD`: the password you want to use for `/admin`

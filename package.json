@@ -1,14 +1,14 @@
 {
   "name": "awsert",
   "version": "1.0.0",
-  "description": "Awsert - recherchez un produit, comparez les prix trouves sur internet.",
+  "description": "Awsert - search for a product, compare prices found across the web.",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE.txt",
   "engines": {
     "node": ">=18.0.0"
   },
