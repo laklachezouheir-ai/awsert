@@ -15,7 +15,7 @@
       'hero.title.part1': 'Compare prices',
       'hero.title.accent': 'in one search',
       'hero.subtitle':
-        'Enter one or more product names, Awsert searches the web and instantly returns the best deals.',
+        'Enter one or more product names, {brand} searches the web and instantly returns the best deals.',
 
       'search.label': 'Product(s) to search',
       'search.placeholder': 'e.g. iPhone 15 128GB\nSamsung Galaxy Buds 3\nNintendo Switch OLED',
@@ -29,9 +29,9 @@
       'features.realtime.desc':
         'Offers come straight from Google Shopping for up-to-date prices, merchant by merchant.',
       'features.best.title': 'Best price highlighted',
-      'features.best.desc': 'Awsert automatically sorts offers and highlights the lowest price found.',
+      'features.best.desc': '{brand} automatically sorts offers and highlights the lowest price found.',
 
-      'footer.tagline': 'Awsert · Price search powered by Google Shopping (Serper)',
+      'footer.tagline': '{brand} · Price search powered by Google Shopping (Serper)',
 
       'results.label': 'Results',
       'results.offerCount_one': '{n} offer found',
@@ -57,7 +57,7 @@
       'admin.config.title': 'Serper key',
       'admin.config.logout': 'Log out',
       'admin.config.subtitle':
-        "This key lets Awsert query Google Shopping (via Serper) to fetch prices.",
+        "This key lets {brand} query Google Shopping (via Serper) to fetch prices.",
       'admin.config.label': 'New Serper key',
       'admin.config.placeholder': 'Paste your Serper key here',
       'admin.config.button': 'Save key',
@@ -96,7 +96,7 @@
       'hero.title.part1': 'Comparez les prix',
       'hero.title.accent': 'en une recherche',
       'hero.subtitle':
-        "Saisissez le nom d'un ou plusieurs produits, Awsert interroge le web et vous retourne instantanément les meilleures offres du moment.",
+        "Saisissez le nom d'un ou plusieurs produits, {brand} interroge le web et vous retourne instantanément les meilleures offres du moment.",
 
       'search.label': 'Produit(s) à rechercher',
       'search.placeholder': 'Ex : iPhone 15 128 Go\nSamsung Galaxy Buds 3\nNintendo Switch OLED',
@@ -112,9 +112,9 @@
         'Les offres proviennent directement de Google Shopping pour des prix à jour, marchand par marchand.',
       'features.best.title': 'Meilleur prix mis en avant',
       'features.best.desc':
-        'Awsert trie automatiquement les offres et met en évidence le prix le plus bas trouvé.',
+        '{brand} trie automatiquement les offres et met en évidence le prix le plus bas trouvé.',
 
-      'footer.tagline': 'Awsert · Recherche de prix propulsée par Google Shopping (Serper)',
+      'footer.tagline': '{brand} · Recherche de prix propulsée par Google Shopping (Serper)',
 
       'results.label': 'Résultats',
       'results.offerCount_one': '{n} offre trouvée',
@@ -140,7 +140,7 @@
       'admin.config.title': 'Clé Serper',
       'admin.config.logout': 'Se déconnecter',
       'admin.config.subtitle':
-        "Cette clé permet à Awsert d'interroger Google Shopping (via Serper) pour récupérer les prix.",
+        "Cette clé permet à {brand} d'interroger Google Shopping (via Serper) pour récupérer les prix.",
       'admin.config.label': 'Nouvelle clé Serper',
       'admin.config.placeholder': 'Collez votre clé Serper ici',
       'admin.config.button': 'Enregistrer la clé',
@@ -191,8 +191,11 @@
   }
 
   function interpolate(str, vars) {
-    if (!vars) return str;
-    return Object.entries(vars).reduce(
+    // {brand} est toujours disponible, injecté depuis branding.js
+    // (window.BRAND) — évite de dupliquer le nom de marque dans chaque appel.
+    const brand = (window.BRAND && window.BRAND.name) || 'Awsert';
+    const merged = { brand, ...vars };
+    return Object.entries(merged).reduce(
       (acc, [key, value]) => acc.replaceAll(`{${key}}`, value),
       str
     );

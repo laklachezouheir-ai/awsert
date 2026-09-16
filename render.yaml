@@ -18,3 +18,7 @@ services:
       # en production (disque non persistant sur le plan gratuit).
       - key: DATABASE_URL
         sync: false
+      # Identité de marque (awsert/dealscout/pricezen) — voir README.md
+      # "Variantes de marque". Absente = "awsert" par défaut.
+      - key: BRAND_ID
+        sync: false

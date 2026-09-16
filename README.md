@@ -101,6 +101,54 @@ Testé en conditions réelles (redémarrage complet du serveur simulant un
 redéploiement) : la clé Serper, le mot de passe admin et la session de
 connexion survivent tous les trois.
 
+## Variantes de marque (vendre le même produit sous plusieurs noms)
+
+Le même moteur (recherche de prix via Serper) peut être déployé sous
+plusieurs identités visuelles différentes — nom, logo, couleurs, titre —
+pour tester plusieurs positionnements/marchés sans dupliquer le code.
+Trois marques sont prêtes dans `lib/branding.js` :
+
+| `BRAND_ID` | Nom | Positionnement | Couleur |
+|---|---|---|---|
+| `awsert` (par défaut) | Awsert | Comparateur de prix neutre/pro | Bleu ardoise |
+| `dealscout` | DealScout | Chasseurs de bonnes affaires, ton punchy | Orange |
+| `pricezen` | PriceZen | Achat serein, sans stress | Vert |
+
+Pour changer de marque, définissez `BRAND_ID` dans `.env` (local) ou
+Environment sur Render (`dealscout` ou `pricezen`) — aucune autre
+modification nécessaire, le nom/logo/couleurs/textes se mettent à jour
+partout automatiquement (page de recherche, page admin, EN et FR).
+
+### Déployer les 3 variantes en parallèle
+
+Comme il s'agit du même code, chaque variante est un **service Render
+séparé** pointant sur ce même dépôt/branche, avec sa propre variable
+`BRAND_ID` (et, si vous voulez vraiment 3 marques indépendantes, son
+propre nom de domaine) :
+
+1. Répétez les étapes de la section **Déploiement sur Render** ci-dessous
+   3 fois → 3 services (`awsert`, `dealscout`, `pricezen` par exemple).
+2. Sur chaque service, ajoutez `BRAND_ID=dealscout` (ou `pricezen`) en
+   plus des variables habituelles.
+3. Un correctif de bug ou une amélioration du moteur de recherche profite
+   aux 3 en même temps (un seul code à maintenir) — seul le déploiement
+   est à refaire sur chaque service après un `git push`.
+
+### Ajouter une 4e variante / personnaliser
+
+Ajoutez une entrée dans l'objet `PRESETS` de `lib/branding.js` (nom, lettre
+de logo, 4 couleurs, titre/description EN+FR) — pas besoin de toucher au
+reste du code, tout le front-end s'adapte automatiquement via `/api/brand`.
+
+### Détails techniques
+
+`public/branding.js` (chargé avant `i18n.js`) récupère la marque active
+via `GET /api/brand` et met à jour à la volée : `<title>`, meta
+description, favicon, logo, et les 4 variables CSS de couleur d'accent.
+Les textes traduits qui mentionnent le nom du produit utilisent un
+placeholder `{brand}` (voir `public/i18n.js`) plutôt que le nom en dur,
+interpolé automatiquement avec la marque active.
+
 ## Déploiement sur Render
 
 Le dépôt contient un fichier `render.yaml` (Blueprint Render) prêt à l'emploi.
@@ -167,10 +215,13 @@ awsert/
 │   ├── config.js             # API de configuration commune (dispatch JSON/Postgres)
 │   ├── configJson.js          # Backend fichier JSON local (repli dev)
 │   ├── configPostgres.js       # Backend PostgreSQL (actif si DATABASE_URL)
-│   └── adminAuth.js             # Sessions et middleware d'authentification admin
+│   ├── adminAuth.js             # Sessions et middleware d'authentification admin
+│   └── branding.js               # Presets de marque (awsert/dealscout/pricezen)
 ├── public/
 │   ├── index.html         # Page de recherche
 │   ├── admin.html         # Page d'administration (/admin)
+│   ├── branding.js        # Applique la marque active (nom/logo/couleurs) au chargement
+│   ├── i18n.js             # Traductions EN/FR, interpole {brand}
 │   ├── style.css
 │   ├── app.js
 │   └── admin.js

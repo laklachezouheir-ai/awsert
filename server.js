@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 const { searchProductPrices } = require('./lib/priceSearch');
 const config = require('./lib/config');
 const adminAuth = require('./lib/adminAuth');
+const branding = require('./lib/branding');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -92,6 +93,13 @@ app.get(
     });
   })
 );
+
+// Identité de marque active sur ce déploiement (voir lib/branding.js) —
+// le front-end s'en sert pour afficher le bon nom/logo/couleurs sans
+// dupliquer le code entre les variantes.
+app.get('/api/brand', (_req, res) => {
+  res.json(branding.getBrand());
+});
 
 // --- Administration : connexion + configuration de la clé Serper ---
 
