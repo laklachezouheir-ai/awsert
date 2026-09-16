@@ -45,8 +45,9 @@ configure depuis une page d'administration dédiée.
 3. Collez votre clé Serper (obtenue gratuitement sur https://serper.dev/)
    et cliquez sur « Enregistrer la clé ».
 
-La clé est alors enregistrée localement dans `data/config.json` (non
-versionné) et utilisée automatiquement par les recherches.
+La clé est alors enregistrée (localement dans `data/config.json`, ou en
+base PostgreSQL si `DATABASE_URL` est configurée — voir section **Base de
+données**) et utilisée automatiquement par les recherches.
 
 Vous pouvez aussi passer par le fichier `.env` si vous préférez (voir
 `.env.example`) :
@@ -65,6 +66,40 @@ Pour le développement avec rechargement automatique :
 ```bash
 npm run dev
 ```
+
+## Base de données
+
+Deux backends de configuration, sélectionnés automatiquement :
+
+- **`DATABASE_URL` absente** → fichier JSON local (`data/config.json`,
+  `lib/configJson.js`). Zéro installation, pratique pour développer, mais
+  **à éviter en production** : sur Render (plan gratuit), le disque n'est
+  pas persistant — la clé Serper et le mot de passe admin disparaîtraient
+  à chaque redéploiement ou réveil du service après une mise en veille.
+- **`DATABASE_URL` définie** → PostgreSQL (`lib/configPostgres.js`),
+  persistant indépendamment du disque de l'app. Les sessions admin sont
+  aussi persistées en base dans ce cas — sans ça, l'admin serait
+  déconnecté à chaque redéploiement.
+
+### Mise en place (recommandé avant tout usage réel)
+
+Le Postgres gratuit de Render **expire après 30 jours** (données
+supprimées ensuite) — pas adapté pour de vraies données. Deux
+alternatives gratuites et durables :
+
+- **[Neon](https://neon.tech/)** (recommandé) — Postgres serverless,
+  0,5 Go gratuit, pas d'expiration, pas de carte bancaire requise.
+- **[Supabase](https://supabase.com/)** — alternative équivalente.
+
+1. Créez un projet, copiez la chaîne de connexion (`postgresql://...`).
+2. Renseignez `DATABASE_URL` dans `.env` (local) ou dans Environment sur
+   Render.
+3. Au démarrage, l'app crée automatiquement les tables nécessaires
+   (`app_config`, `admin_sessions`) — aucune migration manuelle à lancer.
+
+Testé en conditions réelles (redémarrage complet du serveur simulant un
+redéploiement) : la clé Serper, le mot de passe admin et la session de
+connexion survivent tous les trois.
 
 ## Déploiement sur Render
 
@@ -90,13 +125,15 @@ Si tu préfères créer le service manuellement (sans Blueprint) : **New +** →
 **⚠️ Important — disque non persistant** : sur Render, le système de
 fichiers d'un service web est réinitialisé à chaque déploiement et à chaque
 redémarrage (y compris la mise en veille automatique du plan gratuit après
-inactivité). Toute clé enregistrée uniquement via la page `/admin`
-(stockée dans `data/config.json`) sera donc perdue au prochain redémarrage.
-**Sur Render, définis `SERPER_API_KEY` et `ADMIN_PASSWORD` comme variables
-d'environnement** (étape 4 ci-dessus) plutôt que de compter sur `/admin`
-pour la persistance — la page `/admin` reste utilisable pour vérifier la
-configuration, mais devient alors en lecture seule (la clé étant définie
-via l'environnement).
+inactivité). Deux façons de s'en protéger, cumulables :
+
+- Définir `SERPER_API_KEY` et `ADMIN_PASSWORD` comme variables
+  d'environnement (étape 4 ci-dessus) — la page `/admin` reste utilisable
+  pour vérifier la configuration, mais devient alors en lecture seule pour
+  la clé (définie via l'environnement).
+- Configurer `DATABASE_URL` (voir section **Base de données**) — la clé
+  enregistrée depuis `/admin` est alors persistée en base plutôt que sur
+  le disque local, et survit aux redéploiements.
 
 ## Utilisation
 
@@ -110,9 +147,11 @@ via l'environnement).
 
 - Sans clé Serper configurée (ni via `/admin`, ni via `.env`), la recherche
   renvoie une erreur explicite (503) plutôt que des résultats.
-- L'authentification admin est volontairement minimale (un seul mot de passe,
-  sessions en mémoire) : suffisante pour un usage personnel/petite équipe,
-  mais pas pour une gestion multi-utilisateurs. Aucune authentification côté
+- L'authentification admin est volontairement minimale (un seul mot de
+  passe partagé) : suffisante pour un usage personnel/petite équipe, mais
+  pas pour une gestion multi-utilisateurs. Anti-brute-force en place
+  (`express-rate-limit`, 20 tentatives/15 min/IP) et sessions persistées
+  en base si `DATABASE_URL` est configurée. Aucune authentification côté
   utilisateurs finaux ni facturation/abonnement n'est incluse : c'est une
   base volontairement minimale, à étendre selon les besoins (comptes
   utilisateurs, plans payants, historique des recherches, etc.).
@@ -124,9 +163,11 @@ via l'environnement).
 awsert/
 ├── server.js              # Serveur Express : /api/search, /api/health, /api/admin/*
 ├── lib/
-│   ├── priceSearch.js     # Appel à Serper (Google Shopping) et normalisation des résultats
-│   ├── config.js          # Lecture/écriture de la clé Serper et du mot de passe admin
-│   └── adminAuth.js       # Sessions et middleware d'authentification admin
+│   ├── priceSearch.js       # Appel à Serper (Google Shopping) et normalisation des résultats
+│   ├── config.js             # API de configuration commune (dispatch JSON/Postgres)
+│   ├── configJson.js          # Backend fichier JSON local (repli dev)
+│   ├── configPostgres.js       # Backend PostgreSQL (actif si DATABASE_URL)
+│   └── adminAuth.js             # Sessions et middleware d'authentification admin
 ├── public/
 │   ├── index.html         # Page de recherche
 │   ├── admin.html         # Page d'administration (/admin)

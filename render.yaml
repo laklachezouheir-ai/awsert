@@ -7,7 +7,14 @@ services:
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: SERPER_API_KEY
         sync: false
       - key: ADMIN_PASSWORD
+        sync: false
+      # Chaîne de connexion PostgreSQL (Neon, Supabase...) — voir README.md
+      # "Base de données". Absente = repli sur fichier JSON local, à éviter
+      # en production (disque non persistant sur le plan gratuit).
+      - key: DATABASE_URL
         sync: false
