@@ -104,7 +104,7 @@ loginForm.addEventListener('submit', async (event) => {
   await loadAdminData();
 });
 
-// Garde le sélecteur de couleur et le champ texte synchronisés.
+// Keeps the color picker and the text field in sync.
 accentColorInput.addEventListener('input', () => {
   accentColorText.value = accentColorInput.value;
 });

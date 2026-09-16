@@ -1,6 +1,6 @@
 /**
- * Mini-module d'internationalisation partagé par index.html et admin.html.
- * Anglais par défaut, français en option (choix mémorisé dans localStorage).
+ * Small i18n module shared by index.html and admin.html.
+ * English by default, French optional (choice remembered in localStorage).
  */
 (function () {
   const STORAGE_KEY = 'awsert_locale';
@@ -83,8 +83,8 @@
       'admin.status.saveSuccess': 'Serper key saved successfully.',
       'admin.status.brandingSaveSuccess': 'Branding saved. Reloading…',
 
-      // Traductions des codes d'erreur renvoyés par le serveur (langue par défaut : anglais,
-      // donc identiques au message serveur — présents pour compléter le mapping).
+      // Translations for error codes returned by the server (default language: English,
+      // so identical to the server message — present to complete the mapping).
       'error.NO_PRODUCTS': 'Please enter at least one product to search.',
       'error.NO_API_KEY': 'No Serper key configured. Go to /admin to add your key and enable price search.',
       'error.SEARCH_ERROR': 'An error occurred while searching for prices.',
@@ -197,7 +197,7 @@
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === 'en' || stored === 'fr') return stored;
     } catch {
-      // localStorage indisponible (navigation privée, etc.) : on retombe sur l'anglais.
+      // localStorage unavailable (private browsing, etc.): fall back to English.
     }
     return DEFAULT_LOCALE;
   }
@@ -206,7 +206,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, locale);
     } catch {
-      // Rien à faire si le stockage n'est pas disponible : le choix ne sera pas mémorisé.
+      // Nothing to do if storage is unavailable: the choice won't be remembered.
     }
   }
 
@@ -218,20 +218,20 @@
     );
   }
 
-  /** Traduit une clé simple. */
+  /** Translates a simple key. */
   function t(key, vars) {
     const locale = getLocale();
     const str = translations[locale]?.[key] ?? translations[DEFAULT_LOCALE][key] ?? key;
     return interpolate(str, vars);
   }
 
-  /** Traduit une clé pluralisée (`${key}_one` / `${key}_other`) selon un compteur `n`. */
+  /** Translates a pluralized key (`${key}_one` / `${key}_other`) based on a count `n`. */
   function tPlural(key, n, vars) {
     const suffix = n === 1 ? 'one' : 'other';
     return t(`${key}_${suffix}`, { n, ...vars });
   }
 
-  /** Traduit un code d'erreur renvoyé par le serveur ; retombe sur le message brut si inconnu. */
+  /** Translates an error code returned by the server; falls back to the raw message if unknown. */
   function tError(code, fallbackMessage, vars) {
     if (code) {
       const locale = getLocale();
@@ -242,7 +242,7 @@
     return fallbackMessage;
   }
 
-  /** Applique les traductions statiques ([data-i18n], [data-i18n-placeholder]) et met à jour <html lang>. */
+  /** Applies static translations ([data-i18n], [data-i18n-placeholder]) and updates <html lang>. */
   function applyStaticTranslations() {
     document.documentElement.lang = getLocale();
     document.querySelectorAll('[data-i18n]').forEach((el) => {

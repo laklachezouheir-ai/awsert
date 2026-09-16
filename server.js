@@ -14,13 +14,13 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Nombre maximum de produits qu'un utilisateur peut soumettre en une seule requête.
+// Maximum number of products a user can submit in a single request.
 const MAX_PRODUCTS = 10;
 
 /**
- * Sert une page HTML de public/ en y injectant la personnalisation de marque
- * (nom du site, couleur d'accent) directement côté serveur : pas de flash de
- * contenu par défaut, et ça fonctionne même sans JavaScript.
+ * Serves an HTML page from public/, injecting the brand customization
+ * (site name, accent color) directly server-side: no flash of default
+ * content, and it works even without JavaScript.
  */
 function renderBrandedPage(res, fileName) {
   const branding = config.getBranding();
@@ -96,17 +96,17 @@ app.post('/api/search', async (req, res) => {
   }
 });
 
-// Route de santé simple, utile pour le monitoring et le diagnostic.
+// Simple health route, useful for monitoring and diagnostics.
 app.get('/api/health', (_req, res) => {
   const { source: adminPasswordSource } = config.getAdminPassword();
   res.json({
     status: 'ok',
     hasApiKey: Boolean(config.getSerperApiKey()),
-    adminPasswordSource, // 'env' si ADMIN_PASSWORD est définie, 'generated' sinon
+    adminPasswordSource, // 'env' if ADMIN_PASSWORD is set, 'generated' otherwise
   });
 });
 
-// --- Administration : connexion + configuration de la clé Serper ---
+// --- Administration: login + Serper key configuration ---
 
 app.post('/api/admin/login', (req, res) => {
   const { password } = req.body || {};
@@ -162,10 +162,10 @@ app.post('/api/admin/config', adminAuth.requireAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
-// --- Personnalisation : nom du site et couleur d'accent ---
+// --- Customization: site name and accent color ---
 
-// Public : permet au frontend (i18n, textes dynamiques) de connaître le nom
-// du site sans être authentifié.
+// Public: lets the frontend (i18n, dynamic text) know the site name
+// without being authenticated.
 app.get('/api/branding', (_req, res) => {
   const { siteName, accentColor } = config.getBranding();
   res.json({ siteName, accentColor });
